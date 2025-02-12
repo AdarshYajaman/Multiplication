@@ -133,6 +133,7 @@
       <div class="score-board">
         <div class="score-item" id="score">× 3</div>
         <div class="score-item" id="streak">🔥 Streak: 0</div>
+        <div class="score-item" id="mistakes">🔥 Mistakes: 0</div>
         <div class="score-item" id="level">📈 Level 1</div>
       </div>
       <div id="progress-bar"><div id="progress"></div></div>
@@ -192,12 +193,16 @@
       }
 
       function generateQuestion() {
-        const maxNumber = Math.min(5 + Math.floor(level / 2), 10);
-
-        const num2 = Math.floor(Math.random() * maxNumber) + 1;
+        //create random number between 1 and 10
+        const randomIndex = [Math.floor(Math.random() * multiplicands.length)];
+        const num2 = multiplicands[randomIndex];
+        //remove the index value from the array
+        multiplicands.splice(randomIndex, 1);
+        // const num2 = Math.floor(Math.random() * maxNumber) + 1;
         document.getElementById(
           "question"
         ).textContent = `${currentTable} × ${num2} = ?`;
+        // console.log(`${currentTable} × ${num2} = ?`);
         return currentTable * num2;
       }
 
@@ -270,11 +275,13 @@
           setTimeout(() => balloon.remove(), 300);
           createFeedback("🎉 Correct!", "#2ecc71");
           playSound(880, "triangle");
-          if (correctStreak % 3 === 0) {
+          if (multiplicands.length === 0) {
             levelUp();
           }
         } else {
-          correctStreak = 0;
+          mistakes++;
+          num2 = correct / currentTable;
+          multiplicands.push(num2);
           stars = Math.max(0, stars - 1);
           balloon.style.animation = "shake 0.5s";
           createFeedback("❌ Try Again!", "#e74c3c");
@@ -305,6 +312,7 @@
       function levelUp() {
         level++;
         currentTable = Math.min(10, currentTable + 1);
+        multiplicands = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         document.getElementById("level").textContent = `📈 Level ${level}`;
         createFeedback(`🚀 Level ${level}!`, "#3498db");
       }
@@ -314,6 +322,7 @@
         document.getElementById(
           "streak"
         ).textContent = `🔥 Streak: ${correctStreak}`;
+        document.getElementById("mistakes").textContent = `👎 × ${mistakes}`;
       }
 
       function endGame() {
@@ -326,10 +335,12 @@
       }
 
       function newGame() {
-        currentTable = Math.floor(Math.random() * 9) + 2; // Tables 2-10
+        currentTable = 2; //Math.floor(Math.random() * 9) + 2; // Tables 2-10
+        multiplicands = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         stars = 3;
         level = 1;
         correctStreak = 0;
+        mistakes = 0;
         updateScore();
         document.getElementById("level").textContent = "📈 Level 1";
         newQuestion();
