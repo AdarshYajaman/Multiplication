@@ -115,6 +115,16 @@
         animation: feedback 1s ease-out;
         pointer-events: none;
       }
+      .select-multiples {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        visibility: hidden;
+      }
+      .select-text {
+        grid-row: 1;
+        grid-column: 1 / -1;
+        font-size: 24px;
+      }
       @keyframes feedback {
         0% {
           transform: translateY(0) scale(1);
@@ -136,10 +146,50 @@
         <div class="score-item" id="mistakes">🔥 Mistakes: 0</div>
         <div class="score-item" id="level">📈 Level 1</div>
       </div>
+      <div></div>
       <div id="progress-bar"><div id="progress"></div></div>
       <div id="question"></div>
       <div id="balloons"></div>
       <button onclick="newGame()">New Game 🚀</button>
+
+      <div class="select-multiples">
+        <p class="select-text">
+          Select the multiplication you would like to solve
+        </p>
+        <button onclick="currentTable = 2; level=2; setMultiples(); newGame2()">
+          2
+        </button>
+        <button
+          onclick="currentTable = 3; level=3; setMultiples();  newGame2()"
+        >
+          3
+        </button>
+        <button
+          onclick="currentTable = 4; level=4; setMultiples();  newGame2()"
+        >
+          4
+        </button>
+        <button onclick="currentTable = 5; level=5; setMultiples(); newGame2()">
+          5
+        </button>
+        <button onclick="currentTable = 6; level=6; setMultiples(); newGame2()">
+          6
+        </button>
+        <button onclick="currentTable = 7; level=7; setMultiples(); newGame2()">
+          7
+        </button>
+        <button onclick="currentTable = 8; level=8; setMultiples(); newGame2()">
+          8
+        </button>
+        <button onclick="currentTable = 9; level=9; setMultiples(); newGame2()">
+          9
+        </button>
+        <button
+          onclick="currentTable = 10; level=10; setMultiples();newGame2()"
+        >
+          10
+        </button>
+      </div>
     </div>
 
     <script>
@@ -313,8 +363,14 @@
         level++;
         currentTable = Math.min(10, currentTable + 1);
         multiplicands = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-        document.getElementById("level").textContent = `📈 Level ${level}`;
+        setMultiples();
         createFeedback(`🚀 Level ${level}!`, "#3498db");
+      }
+
+      function setMultiples() {
+        document.getElementById(
+          "level"
+        ).textContent = `📈 Multiples of ${level}`;
       }
 
       function updateScore() {
@@ -329,20 +385,38 @@
         document.getElementById(
           "balloons"
         ).innerHTML = `<div style="font-size: 48px; color: #e74c3c; margin: 20px;">
-                    Game Over! Final Level: ${level}
+                    Game Over! You tried multiples of : ${level}
                 </div>`;
         createFeedback("💔 Game Over!", "#e74c3c");
+        document.getElementsByClassName(
+          "select-multiples"
+        )[0].style.visibility = "visible";
       }
 
       function newGame() {
         currentTable = 2; //Math.floor(Math.random() * 9) + 2; // Tables 2-10
         multiplicands = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         stars = 3;
-        level = 1;
+        level = 2;
         correctStreak = 0;
         mistakes = 0;
         updateScore();
-        document.getElementById("level").textContent = "📈 Level 1";
+        document.getElementById("level").textContent = "📈 Multiples of 2";
+        newQuestion();
+      }
+
+      function newGame2() {
+        document.getElementsByClassName(
+          "select-multiples"
+        )[0].style.visibility = "hidden";
+        multiplicands = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        stars = 3;
+        correctStreak = 0;
+        mistakes = 0;
+        updateScore();
+        document.getElementById(
+          "level"
+        ).textContent = `📈 Multiples of ${level}`;
         newQuestion();
       }
 
