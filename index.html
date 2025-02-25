@@ -118,7 +118,6 @@
       .select-multiples {
         display: grid;
         grid-template-columns: repeat(5, 1fr);
-        visibility: hidden;
       }
       .select-text {
         grid-row: 1;
@@ -408,7 +407,7 @@
       function newGame2() {
         document.getElementsByClassName(
           "select-multiples"
-        )[0].style.visibility = "hidden";
+        )[0].style.visibility = "visible";
         multiplicands = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         stars = 3;
         correctStreak = 0;
